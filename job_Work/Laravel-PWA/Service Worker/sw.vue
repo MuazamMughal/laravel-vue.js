@@ -44,10 +44,3 @@ self.addEventListener('fetch', (event) => {
     );
     return;
   }
-
-  // Strategy: Cache First for all other assets (App Shell)
-  event.respondWith(
-    caches.match(request)
-      .then((cachedResponse) => cachedResponse || fetch(request))
-  );
-});
