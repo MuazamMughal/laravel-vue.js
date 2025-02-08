@@ -24,3 +24,36 @@ export const useTaskStore = defineStore('task', () => {
       $q.notify({ type: 'negative', message: 'Could not fetch tasks. You are offline.' });
     }
   };
+
+  const addTask = async (taskData) => {
+    const newTask = { ...taskData, id: Date.now(), _local: true }; // Temp local ID
+
+    // Optimistic UI update
+    tasks.value.unshift(newTask);
+
+    if (isOnline.value) {
+      try {
+        await syncAddTask(taskData);
+      } catch (error) {
+        // If online but request fails, add to pending queue
+        queueAction('add', taskData);
+      }
+    } else {
+      // If offline, add to pending queue
+      queueAction('add', taskData);
+    }
+  };
+
+  const syncAddTask = async (taskData) => {
+    const response = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(taskData),
+    });
+    const savedTask = await response.json();
+    // Replace the local task with the server task
+    const index = tasks.value.findIndex(t => t._local && t.title === taskData.title);
+    if (index !== -1) {
+      tasks.value.splice(index, 1, savedTask);
+    }
+  };
