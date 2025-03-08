@@ -57,3 +57,10 @@ export const useTaskStore = defineStore('task', () => {
       tasks.value.splice(index, 1, savedTask);
     }
   };
+
+  const queueAction = (type, payload) => {
+    const action = { type, payload, timestamp: new Date().toISOString() };
+    pendingActions.value.push(action);
+    localStorage.setItem('pendingActions', JSON.stringify(pendingActions.value));
+    $q.notify({ type: 'info', message: 'Action queued for sync.', timeout: 1000 });
+  };
