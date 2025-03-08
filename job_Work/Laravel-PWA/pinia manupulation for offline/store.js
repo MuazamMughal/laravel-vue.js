@@ -64,3 +64,31 @@ export const useTaskStore = defineStore('task', () => {
     localStorage.setItem('pendingActions', JSON.stringify(pendingActions.value));
     $q.notify({ type: 'info', message: 'Action queued for sync.', timeout: 1000 });
   };
+
+  const syncPendingActions = async () => {
+    const actionsToProcess = [...pendingActions.value];
+    if (actionsToProcess.length === 0) return;
+
+    $q.notify({ type: 'ongoing', message: 'Syncing offline actions...' });
+
+    for (const action of actionsToProcess) {
+      try {
+        switch (action.type) {
+          case 'add':
+            await syncAddTask(action.payload);
+            break;
+          // Cases for 'update' and 'delete' would go here
+        }
+        // Remove the action from the queue on success
+        const index = pendingActions.value.findIndex(a => a.timestamp === action.timestamp);
+        if (index !== -1) {
+          pendingActions.value.splice(index, 1);
+        }
+      } catch (error) {
+        console.error(`Failed to sync action ${action.type}:`, error);
+        break; // Stop the loop if one action fails
+      }
+    }
+    localStorage.setItem('pendingActions', JSON.stringify(pendingActions.value));
+    $q.notify({ type: 'positive', message: 'Offline sync complete!', timeout: 1000 });
+  };
