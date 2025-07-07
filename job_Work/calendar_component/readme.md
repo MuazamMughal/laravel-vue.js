@@ -13,3 +13,11 @@ A fully interactive calendar component built using **Vue 3 Composition API**, in
 - ✅ **Highlighting for selected date and slot**
 - 🔁 **Auto-refresh of slots** on date change
 - 🎨 Clean and responsive UI with **TailwindCSS**
+
+## 🧩 Dependencies
+
+- [`vue`](https://vuejs.org/) (Composition API)
+- [`axios`](https://axios-http.com/) – for HTTP requests
+- [`dayjs`](https://day.js.org/) – for date handling
+- [`TailwindCSS`](https://tailwindcss.com/) – for utility-first styling
+- [`Inertia.js`](https://inertiajs.com/) – for Laravel-Vue integration
