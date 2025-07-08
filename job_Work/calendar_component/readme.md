@@ -31,3 +31,14 @@ Custom modal component used to display the calendar in a styled overlay.
 
 ### `<ProceedArrow />`
 A simple SVG arrow used in the Proceed to Payment button.
+### Emits
+
+- `close` — Triggered when the user closes the modal.
+- `proceed` — Triggered with selected date & time to initiate payment flow.
+
+## 🛠️ Customization
+
+You can adjust:
+- Time slot duration via `props.data.meeting_duration`
+- Owner/User ID via `props.data.owner_id`
+- Price and Product name from `props.data`
