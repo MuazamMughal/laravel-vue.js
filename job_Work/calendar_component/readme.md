@@ -21,3 +21,13 @@ A fully interactive calendar component built using **Vue 3 Composition API**, in
 - [`dayjs`](https://day.js.org/) – for date handling
 - [`TailwindCSS`](https://tailwindcss.com/) – for utility-first styling
 - [`Inertia.js`](https://inertiajs.com/) – for Laravel-Vue integration
+
+
+
+## 📁 Component Breakdown
+
+### `<ViewModalV2 />`
+Custom modal component used to display the calendar in a styled overlay.
+
+### `<ProceedArrow />`
+A simple SVG arrow used in the Proceed to Payment button.
