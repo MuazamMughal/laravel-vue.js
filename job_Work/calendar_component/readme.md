@@ -42,3 +42,8 @@ You can adjust:
 - Time slot duration via `props.data.meeting_duration`
 - Owner/User ID via `props.data.owner_id`
 - Price and Product name from `props.data`
+## 💡 Example API Format
+
+The backend API should respond with:
+```json
+{
