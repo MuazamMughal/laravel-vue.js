@@ -46,4 +46,9 @@ You can adjust:
 
 The backend API should respond with:
 ```json
-{
+{"available_slots": [
+    { "start": "10:00 AM", "end": "11:00 AM" },
+    { "start": "12:00 PM", "end": "1:00 PM" }
+  ],
+  "working_days": ["monday", "tuesday", "wednesday", "thursday", "friday"]
+}
