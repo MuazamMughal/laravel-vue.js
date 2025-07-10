@@ -6,7 +6,7 @@
 
 This is the calendar booking component I built during my job.
 
-![Calendar Preview](assets/calendar-component.jpg)
+![Calendar Preview](/calendar-component.jpg)
 
 
 A fully interactive calendar component built using **Vue 3 Composition API**, integrated with a backend to fetch and display available time slots for bookings. Ideal for appointment scheduling or productized services with Stripe-based payment.
