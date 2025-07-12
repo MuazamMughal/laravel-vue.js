@@ -36,3 +36,19 @@ const daysInMonth = computed(() => {
   const start = selectedDate.value.startOf('month')
   const end = selectedDate.value.endOf('month')
   const days = []
+
+  for (let d = start; d.isBefore(end) || d.isSame(end, 'day'); d = d.add(1, 'day')) {
+    days.push({ label: d.date(), date: d })
+  }
+
+  return days
+})
+
+const isSelectedDate = (date) => selectedDate.value.isSame(date, 'day')
+const isToday = (date) => date && today.isSame(date, 'day')
+const isPastDay = (date) => date && date.isBefore(today, 'day')
+// A date is an off-day if its day name (e.g. "monday") exists in `offDays`
+const isOffDay = (date) => {
+  if (!date) return false
+  return offDays.value.includes(date.format('dddd').toLowerCase())
+}
