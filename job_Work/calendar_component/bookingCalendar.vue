@@ -9,3 +9,18 @@ const props = defineProps({
   openModal: Boolean,
   data: Object,
 })
+
+const emit = defineEmits(["close"]);
+const closeModal = () => {
+  emit("close");
+}
+
+const displayMonth = computed(() => selectedDate.value.format('MMMM'));
+const displayYear = computed(() => selectedDate.value.format('YYYY'));
+const today = dayjs();
+const selectedDate = ref(today);
+const selectedTime = ref(null);
+const timeSlots = ref([]);
+const loading = ref(false);
+const proceeding = ref(false);
+const error = ref('');
