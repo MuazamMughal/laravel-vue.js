@@ -77,3 +77,11 @@ const fetchAvailableSlots = async () => {
     loading.value = false
   }
 }
+
+const selectDate = (date) => {
+  if (date && !isPastDay(date) && !isOffDay(date)) {
+    selectedDate.value = date
+    selectedTime.value = null
+    fetchAvailableSlots()
+  }
+}
