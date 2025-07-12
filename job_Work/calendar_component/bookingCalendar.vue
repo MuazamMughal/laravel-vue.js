@@ -67,3 +67,13 @@ const fetchAvailableSlots = async () => {
       }
     })
     timeSlots.value = res.data.available_slots || []
+
+    const workingDays = (res.data.working_days || weekDays);
+    offDays.value = weekDays.filter(d => !workingDays.includes(d));
+  } catch (err) {
+    error.value = err?.response?.data?.error || err.message || 'No Slots Available';
+    console.error("Error fetching slots:", err)
+  } finally {
+    loading.value = false
+  }
+}
