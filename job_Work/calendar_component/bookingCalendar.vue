@@ -52,3 +52,18 @@ const isOffDay = (date) => {
   if (!date) return false
   return offDays.value.includes(date.format('dddd').toLowerCase())
 }
+
+const fetchAvailableSlots = async () => {
+  loading.value = true
+  timeSlots.value = []
+  error.value = ''
+
+  try {
+    const res = await axios.get('/calendar/available-slots', {
+      params: {
+        date: selectedDate.value.format('YYYY-MM-DD'),
+        slotDuration: props.data?.meeting_duration || 60,
+        user_id: props.data?.owner_id
+      }
+    })
+    timeSlots.value = res.data.available_slots || []
