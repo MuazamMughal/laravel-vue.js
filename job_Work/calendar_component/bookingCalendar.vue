@@ -85,3 +85,13 @@ const selectDate = (date) => {
     fetchAvailableSlots()
   }
 }
+
+const goToPreviousMonth = () => {
+  const firstOfPrevMonth = selectedDate.value.subtract(1, 'month').startOf('month')
+  let probe = firstOfPrevMonth;
+  // Find the first date in the new month that is not an off-day and not in the past
+  while ((isOffDay(probe) || isPastDay(probe)) && probe.month() === firstOfPrevMonth.month()) {
+    probe = probe.add(1, 'day');
+  }
+  selectedDate.value = probe;
+}
