@@ -124,3 +124,21 @@ const proceedToPayment = () => {
     time: formattedTime
   })
 }
+
+onMounted(fetchAvailableSlots)
+watch(selectedDate, fetchAvailableSlots)
+</script>
+
+<template>
+  <ViewModalV2 :fullHeight="true" rounded="md:rounded-[10px]" maxWidth="5xl" class="!bg-white" @close="closeModal" :openModal="openModal" :crossBtn="false">
+    <div class="relative p-6">
+      <div class="bg-white rounded-lg shadow-md w-full max-w-5xl border border-[#3A189B]">
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-[#3A189B] flex items-start justify-between">
+          <div>
+            <h2 class="text-xl font-semibold text-purple-800">{{ data?.product_name }} (${{ data?.price }}, {{ data?.meeting_duration }} Mins)</h2>
+            <p class="text-sm text-gray-500 italic ">
+              The calendar is as per EST: New York Time Zone
+            </p>
+          </div>
+          <!-- Close Button Circle -->
