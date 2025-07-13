@@ -159,3 +159,36 @@ watch(selectedDate, fetchAvailableSlots)
             </svg>
           </button>
         </div>
+         <!-- Calendar and Slots -->
+        <div class="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-[#3A189B]">
+          <!-- Calendar -->
+          <div class="w-full md:w-2/3 p-6">
+            <!-- Month Navigation -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="ml-4 text-2xl  text-gray-800">
+                  <div class="ml- text-2xl font-semibold text-gray-800 flex gap-1 items-baseline">
+                  <span class="text-xl">{{ displayMonth }}</span>
+                  <span class="text-gray-500  text-xl font-normal">{{ displayYear }}</span>
+                  </div>
+              </div>
+              <div class="flex gap-1">
+                <button
+                  @click="goToPreviousMonth"
+                  class="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                >
+                  <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6"></path>
+                  </svg>
+                </button>
+                <button
+                  @click="goToNextMonth"
+                  class="p-2 bg-gray-100 rounded-full hover:bg-gray-200"
+                >
+                  <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
