@@ -192,3 +192,29 @@ watch(selectedDate, fetchAvailableSlots)
                 </button>
               </div>
             </div>
+            
+            <!-- Weekdays -->
+            <div class="grid grid-cols-7 gap-2 text-center text-md font-medium text-gray-500 mb-2">
+              <div v-for="day in weekDays" :key="day" class="capitalize">{{ day.slice(0,3) }}</div>
+            </div>
+
+            <!-- Calendar Days -->
+            <div class="grid grid-cols-7 gap-4">
+              <button
+                v-for="day in daysInMonth"
+                :key="day.date"
+                @click="() => !isPastDay(day.date) && !isOffDay(day.date) && selectDate(day.date)"
+                :class="[
+                  day.label ? 'aspect-square bg-[#F5F6FA] rounded-md text-sm font-medium' : 'cursor-default',
+                  isOffDay(day.date) ? 'bg-red-100  text-red-600 cursor-not-allowed' : '',
+                  isSelectedDate(day.date) ? 'bg-violet-900 text-white'  : '',
+                  (isPastDay(day.date) || isOffDay(day.date))
+                    ? 'text-red-400  bg-red-100 cursor-not-allowed opacity-60'
+                    : day.label ? 'text-gray-700  hover:border-[#3A189B] hover:border-2 cursor-pointer' : ''
+                ]"
+                :disabled="isPastDay(day.date) || isOffDay(day.date)"
+              >
+                {{ day.label }}
+              </button>
+            </div>
+          </div>
