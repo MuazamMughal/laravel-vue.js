@@ -95,3 +95,12 @@ const goToPreviousMonth = () => {
   }
   selectedDate.value = probe;
 }
+const goToNextMonth = () => {
+  const firstOfNextMonth = selectedDate.value.add(1, 'month').startOf('month')
+  let probe = firstOfNextMonth;
+  // Find the first date in the new month that is not an off-day and not in the past
+  while ((isOffDay(probe) || isPastDay(probe)) && probe.month() === firstOfNextMonth.month()) {
+    probe = probe.add(1, 'day')
+  }
+  selectedDate.value = probe;
+}
