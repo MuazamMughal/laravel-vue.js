@@ -142,3 +142,20 @@ watch(selectedDate, fetchAvailableSlots)
             </p>
           </div>
           <!-- Close Button Circle -->
+           <button
+            @click="$emit('close')"
+            class="w-7 h-7 mt-2 mr-2 flex items-center justify-center rounded-full border border-[#3A189B] text-[#3A189B] hover:bg-[#3A189B] hover:text-white transition"
+            aria-label="Close"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
