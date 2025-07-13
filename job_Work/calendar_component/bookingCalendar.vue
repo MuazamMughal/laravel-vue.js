@@ -104,3 +104,23 @@ const goToNextMonth = () => {
   }
   selectedDate.value = probe;
 }
+
+const proceedToPayment = () => {
+  if (!selectedTime.value) return;
+  
+  const [hour, minute] = selectedTime.value.start.split(':');
+  const [hourNumber] = hour.split(' ');
+  
+  const isPM = hour.includes('PM');
+  const finalHour = isPM ? (parseInt(hourNumber) + 12) % 24 : parseInt(hourNumber);
+  
+  const formattedDate = selectedDate.value.format('YYYY-MM-DD');
+  const formattedTime = `${finalHour.toString().padStart(2, '0')}:${minute.split(' ')[0]}:00`;
+
+  proceeding.value = true;
+
+  emit('proceed', {
+    date: formattedDate,
+    time: formattedTime
+  })
+}
