@@ -218,3 +218,15 @@ watch(selectedDate, fetchAvailableSlots)
               </button>
             </div>
           </div>
+
+          <!-- Time Slots -->
+          <div class="w-full md:w-1/3 p-6">
+            <div class="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+              <!-- Skeleton -->
+              <template v-if="loading">
+                <div
+                  v-for="i in 9"
+                  :key="i"
+                  class="animate-pulse py-2 bg-gray-200 rounded-md border text-sm"
+                >&nbsp;</div>
+              </template>
