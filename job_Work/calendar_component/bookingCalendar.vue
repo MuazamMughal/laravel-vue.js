@@ -230,3 +230,29 @@ watch(selectedDate, fetchAvailableSlots)
                   class="animate-pulse py-2 bg-gray-200 rounded-md border text-sm"
                 >&nbsp;</div>
               </template>
+              
+              <!-- Available Slots -->
+              <template v-else-if="timeSlots?.length > 0">
+                <button
+                  v-for="slot in timeSlots"
+                  :key="slot.start"
+                  @click="selectedTime = slot"
+                  class="w-full px-4 py-2 text-sm rounded-md font-semibold text-left text-[#3A189B] flex items-center justify-around transition-all border "
+                  :class="{
+                    'bg-[#3A189B]  hover:text-white text-white': selectedTime?.start === slot.start,
+                    'bg-[#F5F6FA] hover:bg-[#3A189B] hover:text-white': selectedTime?.start !== slot.start
+                  }"
+                >
+                  <span class="flex items-center">
+                    <span class="w-2 h-2 font-bold bg-green-500 rounded-full mr-2"></span>
+                    {{ slot.start }} - {{ slot.end }}
+                  </span>
+                </button>
+              </template>
+              <!-- No Slots -->
+              <div v-else class="text-sm text-gray-500">
+                {{ error || 'No Slots Available' }}
+              </div>
+            </div>
+          </div>
+        </div>
