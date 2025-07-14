@@ -256,3 +256,23 @@ watch(selectedDate, fetchAvailableSlots)
             </div>
           </div>
         </div>
+        
+        <!-- Footer with Payment -->
+        <div class="flex justify-between items-center px-6 py-4 border-t border-[#3A189B] text-sm text-gray-500">
+          <p>
+            You’ll be redirected to Payment Gateway (Stripe) to make a payment of ${{ data?.price }}.
+          </p>
+          <button
+            @click="proceedToPayment"
+            :disabled="!selectedTime || proceeding"
+            class="flex items-center gap-3 bg-[#3A189B] text-white px-3 pl-6 py-2 rounded-full hover:bg-[#3A189B] disabled:opacity-50 transition whitespace-nowrap"
+          >
+            <span v-if="!proceeding">Proceed to Payment</span>
+            <span v-else>Proceeding Please Wait...</span>
+            <ProceedArrow v-if="!proceeding"  class="h-7 w-7 "/>
+          </button>
+        </div>
+      </div>
+    </div>
+  </ViewModalV2>
+</template>
