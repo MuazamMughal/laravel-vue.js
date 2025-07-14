@@ -276,3 +276,17 @@ watch(selectedDate, fetchAvailableSlots)
     </div>
   </ViewModalV2>
 </template>
+
+
+<style scoped>
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5);
+  border-radius: 20px;
+}
+button {
+  transition: all 0.2s ease;
+}
+</style>
