@@ -29,3 +29,5 @@ Route::get('/new', [UserController::class ,'aboutUser2'])->name('aboutUser2');
 Route::get('/new/{name}', [UserController::class ,'getUserName'])->name('getUserName');  
 
 Route::get('/view/{name}', [UserController::class ,'view'])->name('view');
+
+// now i am gona study the view afther the controler basics
