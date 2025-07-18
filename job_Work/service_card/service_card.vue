@@ -27,3 +27,12 @@
 
     <!-- Debug Type (optional) -->
     <!-- <div class="text-xs italic text-gray-500">Type: {{ cardType }}</div> -->
+
+    <!-- Consultation Card -->
+    <template v-if="cardType === 'consultation'">
+      <div class="text-green-600 text-sm  font-normal">
+        ● Next Available in 3 days
+      </div>
+      <div class="flex items-center justify-between gap-2">
+
+      
