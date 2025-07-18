@@ -18,3 +18,12 @@
        
       </div>
     </div>
+
+    <!-- Description -->
+    <div
+      v-html="data?.description"
+      class="font-jakarta flex-1 line-clamp-3 overflow-hidden text-ellipsis text-xs sm:text-sm md:text-[15px] font-normal leading-[16px] text-[#000000CC]"
+    ></div>
+
+    <!-- Debug Type (optional) -->
+    <!-- <div class="text-xs italic text-gray-500">Type: {{ cardType }}</div> -->
