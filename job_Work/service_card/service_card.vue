@@ -57,3 +57,23 @@
   Book Session <span class="flex items-center justify-center w-6 h-6  bg-white text-[#3A189B] rounded-full">→</span>
 </button>
 </div>
+
+    </div>
+    
+    </template>
+
+    <!-- Subscription Card -->
+    <template v-else-if="cardType === 'subscription'">
+      
+      <div class="flex items-center justify-between gap-2">
+      
+      <div class="flex items-center  gap-1 justify-between text-gray-800 text-xs">
+        <ExpertBriefcase class="h-6 font-semibold w-6" />
+      <div class="flex flex-col  text-gray-800 text-xs">
+        <div class="sm:text-[12px] md:lg:text-[15px] font-semibold">
+          ${{ formattedPrice }} {{ data?.repeat_payment_every > 1 ? ('every ' + data?.repeat_payment_every) : 'per' }} {{ data?.repeat_payment_every_type }}{{ data?.repeat_payment_every > 1 ? 's' : '' }}
+        </div>
+     <div class="text-[11px]">
+      Cancel at anytime
+
+     </div>
