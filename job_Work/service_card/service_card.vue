@@ -89,3 +89,8 @@
 </button>
 </div>
     </template>
+    
+    <!-- Digital Good Card -->
+    <template v-else-if="cardType === 'digital_good'">
+      <div class="flex items-center justify-between gap-2">
+      
