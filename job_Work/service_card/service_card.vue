@@ -42,3 +42,18 @@
           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 
           2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
+            
+        
+      </div>
+    </div>
+    
+    <div>
+
+    
+      <button
+  @click="onlineMeetingBooking(expert_id, data.id)"
+  class=" flex items-center  gap-1 text-white bg-[#3A189B] text-[12px] rounded-full px-2 py-1.5 text-xs text-center font-[11px] hover:bg-[#3A189B] transition-all duration-300 ease-in-out"
+>
+  Book Session <span class="flex items-center justify-center w-6 h-6  bg-white text-[#3A189B] rounded-full">→</span>
+</button>
+</div>
