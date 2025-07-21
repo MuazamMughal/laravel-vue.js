@@ -121,3 +121,12 @@ Already Purchased
       </div>
     </template>
   </div>
+<!-- Calendar Modal -->
+  <BookingCalendar
+    v-if="openCalendarModal"
+    :openModal="openCalendarModal"
+    @close="openCalendarModal = false"
+    :data="data"
+    @proceed="handleProceed"
+  />
+</template>
