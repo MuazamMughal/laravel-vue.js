@@ -93,4 +93,15 @@
     <!-- Digital Good Card -->
     <template v-else-if="cardType === 'digital_good'">
       <div class="flex items-center justify-between gap-2">
+       
+      <div class="flex items-center justify-center  gap-1  text-gray-800 text-xs">
+        <ExpertBriefcase class="h-6 w-6" />
+      <div class="flex flex-col  text-gray-800 font-semibold text-[16px]">
       
+          ${{ formattedPrice }} 
+        
+     
+      
+        
+      </div>
+    </div>
