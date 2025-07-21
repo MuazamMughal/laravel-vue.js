@@ -112,3 +112,12 @@
 >
 Purchase <span class="flex items-center justify-center w-6 h-6  bg-white text-[#3A189B] rounded-full">→</span>
 </button>
+   <button
+        v-else
+        class=" font-inter flex items-center  gap-1 text-white bg-[#3A189B] rounded-full px-2 py-1.5 text-[12px] text-center  hover:bg-[#3A189B] transition-all duration-300 ease-in-out"
+  >
+Already Purchased
+</button>
+      </div>
+    </template>
+  </div>
