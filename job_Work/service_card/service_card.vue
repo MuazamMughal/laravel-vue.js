@@ -171,3 +171,20 @@ const formattedPrice = computed(() => {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     .replace('.00', '')
 })
+const meetingtime = computed(() => {
+  return props.data?.meeting_duration
+})
+const subscriptionPeriod = computed(() => {
+  if (props.data?.repeat_payment_every_type === 'year') {
+    return 'per year'
+  }
+  if (props.data?.repeat_payment_every_type === 'month') {
+    return 'per month'
+  }
+  if (props.data?.repeat_payment_every_type === 'week') {
+    return 'per week'
+  }
+  if (props.data?.repeat_payment_every_type === 'day') {
+    return 'per day'
+  }
+})
