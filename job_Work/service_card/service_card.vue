@@ -130,3 +130,19 @@ Already Purchased
     @proceed="handleProceed"
   />
 </template>
+
+
+<script setup>
+import { ref, computed } from 'vue'
+import { usePage, router } from '@inertiajs/vue3'
+
+import AvatarImg from '@/Components/AvatarImg.vue'
+import LikeExpert from '@/Components/svg/LikeExpert.vue'
+import ExpertBriefcase from '@/Components/svg/ExpertBriefcase.vue'
+import BookingCalendar from '@/Components/BookingCalendar.vue'
+import { ArrowRightCircleIcon } from '@heroicons/vue/24/outline'
+
+const props = defineProps({
+  data: Object,
+  expert_id: String,
+})
