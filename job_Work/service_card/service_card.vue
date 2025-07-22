@@ -188,3 +188,18 @@ const subscriptionPeriod = computed(() => {
     return 'per day'
   }
 })
+
+// 3. Functions
+const onlineMeetingBooking = (_expert, _id) => {
+  if (!isLoggedIn.value) {
+    window.location.href = '/login'
+    return
+  }
+  openCalendarModal.value = true
+}
+
+const handleProceed = (data) => {
+  selectedDate.value = data.date
+  selectedTime.value = data.time
+  handleBuyNow(props.data?.id)
+}
