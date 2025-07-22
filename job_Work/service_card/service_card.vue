@@ -203,3 +203,9 @@ const handleProceed = (data) => {
   selectedTime.value = data.time
   handleBuyNow(props.data?.id)
 }
+
+const handleBuyNow = (_id) => {
+  if (!isLoggedIn.value) {
+    window.location.href = '/login'
+    return
+  }
