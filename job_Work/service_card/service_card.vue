@@ -146,3 +146,14 @@ const props = defineProps({
   data: Object,
   expert_id: String,
 })
+
+// 1. Card type logic
+const cardType = computed(() => {
+  const type = props.data?.payment_type
+  const isOnline = props.data?.online_meeting
+
+  if (type === 'subscription') return 'subscription'
+  if (type === 'single_payment' && isOnline) return 'consultation'
+  if (type === 'single_payment' && !isOnline) return 'digital_good'
+  return 'unknown'
+})
