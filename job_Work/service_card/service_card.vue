@@ -209,3 +209,11 @@ const handleBuyNow = (_id) => {
     window.location.href = '/login'
     return
   }
+
+  const params = {
+    event_happens_at: selectedDateAndTime.value,
+  }
+
+  window.location.href = `/checkout/product/${_id}?` + new URLSearchParams(params).toString()
+}
+</script>
