@@ -157,3 +157,17 @@ const cardType = computed(() => {
   if (type === 'single_payment' && !isOnline) return 'digital_good'
   return 'unknown'
 })
+
+// 2. Logic variables
+const isLoggedIn = computed(() => usePage().props?.auth?.user)
+const selectedDate = ref('')
+const selectedTime = ref('')
+const selectedDateAndTime = computed(() => selectedDate.value + ' ' + selectedTime.value)
+const openCalendarModal = ref(false)
+
+const formattedPrice = computed(() => {
+  return props.data?.price
+    ?.toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    .replace('.00', '')
+})
