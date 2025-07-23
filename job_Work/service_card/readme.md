@@ -1,6 +1,6 @@
 # Card Component for Consultation, Subscription, and Digital Goods
 
-![Card Component Example](https://via.placeholder.com/300x200.png?text=Card+Component+Example)
+![Card Component](service_card.PNG)
 
 ## Overview
 
@@ -122,4 +122,3 @@ As the developer, I created a reusable and dynamic Vue.js card component to disp
 - **Accessibility**: Enhance ARIA attributes for better screen reader support.
 - **Custom Icons**: Replace placeholder SVGs with custom-designed icons for branding consistency.
 
-This component is a core part of a larger application, likely an e-commerce or service platform, providing a clean and efficient way to present products to users while facilitating actions like booking or purchasing.
