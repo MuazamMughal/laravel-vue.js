@@ -29,6 +29,20 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
- 
+  // Strategy: Network First, fall back to Cache for API calls
+  if (request.url.includes('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then((networkResponse) => {
+          // Clone response to store it in cache
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME)
+            .then((cache) => cache.put(request, responseClone));
+          return networkResponse;
+        })
+        .catch(() => caches.match(request)) // Offline: Serve from cache
+        
+    );
+    return;
 
   }
