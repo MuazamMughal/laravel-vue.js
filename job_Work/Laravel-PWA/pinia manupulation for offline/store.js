@@ -92,3 +92,27 @@ export const useTaskStore = defineStore('task', () => {
     localStorage.setItem('pendingActions', JSON.stringify(pendingActions.value));
     $q.notify({ type: 'positive', message: 'Offline sync complete!', timeout: 1000 });
   };
+
+  // Listen for online/offline events
+  window.addEventListener('online', () => {
+    isOnline.value = true;
+    syncPendingActions();
+    fetchTasks(); // Re-fetch to get any changes from other clients
+  });
+  window.addEventListener('offline', () => {
+    isOnline.value = false;
+    $q.notify({ type: 'warning', message: 'You are now offline.', timeout: 1000 });
+  });
+
+  const syncPendingActions = () => {
+    if (isOnline.value) {
+      syncPendingActions();
+    }
+  };
+
+  return {
+    tasks, isOnline, pendingActions,
+    completedTasks, pendingTasks,
+    fetchTasks, addTask, syncPendingActions
+  };
+});
