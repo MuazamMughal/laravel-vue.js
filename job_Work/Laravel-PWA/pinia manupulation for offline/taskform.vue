@@ -39,7 +39,5 @@
     });
     title.value = '';
     description.value = '';
-
-    
   };
   </script>
