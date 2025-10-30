@@ -8,3 +8,11 @@ use League\Fractal\TransformerAbstract;
 class EventAudienceTransformer extends TransformerAbstract
 {
    
+    public function transform(EventAudience $eventAudience)
+    {
+        return [
+            'id' => $eventAudience->audience->id,
+            'name' => $eventAudience->audience->name,
+        ];
+    }
+}
