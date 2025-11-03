@@ -12,3 +12,9 @@ class EventTransformer extends TransformerAbstract
     {
         $this->type = $type;
     }
+
+      public function transform(Event $event): array
+    {
+
+        $page = '/events/detail';
+        $url = url($page) . '/' . $event->slug;
