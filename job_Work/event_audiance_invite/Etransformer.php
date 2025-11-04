@@ -18,3 +18,9 @@ class EventTransformer extends TransformerAbstract
 
         $page = '/events/detail';
         $url = url($page) . '/' . $event->slug;
+
+         return [
+            'id' => $event->id,
+            'uuid' => $event->uuid,
+            ];
+    }
