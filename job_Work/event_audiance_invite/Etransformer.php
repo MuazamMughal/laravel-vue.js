@@ -24,3 +24,8 @@ class EventTransformer extends TransformerAbstract
             'uuid' => $event->uuid,
             ];
     }
+
+     public function includeEventAudiences(Event $event): Collection|NullResource
+    {
+        return $this->collection($event->eventAudiences, new \App\Transformers\Admin\Events\EventAudienceTransformer());
+    }
