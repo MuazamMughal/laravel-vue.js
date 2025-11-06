@@ -7,3 +7,9 @@ if (!function_exists('prepareEditData')) {
             $event,
             new \App\Transformers\Admin\Events\EventTransformer(EventTypeEnum::EVENT)
         )->parseIncludes(['hosts', 'categories', 'attendees', 'attachments', 'links', 'ticket', 'channel', 'tags', 'vonageSession', 'participants', 'eventPartnerChannels', 'eventRecordings', 'eventAudiences']);
+
+          $transformedData = $eventData->toArray();
+
+             $data = [
+            'event' => $eventData,
+            ]
