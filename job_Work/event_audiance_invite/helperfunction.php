@@ -13,3 +13,7 @@ if (!function_exists('prepareEditData')) {
              $data = [
             'event' => $eventData,
             ]
+
+            return $data
+        }
+    }
