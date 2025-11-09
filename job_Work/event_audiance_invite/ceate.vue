@@ -7,7 +7,11 @@ const form = useForm({
     audiance:[]
 
 })
-
+const selectedAudiences = ref([]);
+const customLabelAudiences = (audience) => audience?.name || '';
+const validateAudiences = () => {
+    form.errors.audiences = form.audiences?.length > 0 ? null : 'Please select at least one audience.';
+}
 
 
 
