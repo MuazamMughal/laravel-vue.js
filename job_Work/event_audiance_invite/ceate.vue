@@ -13,7 +13,9 @@ const validateAudiences = () => {
     form.errors.audiences = form.audiences?.length > 0 ? null : 'Please select at least one audience.';
 }
 
-
-
+watch(() => form.audiences, validateAudiences);
+function validateForm() {
+       validateAudiences();
+}
 
 </script>
