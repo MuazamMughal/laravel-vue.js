@@ -1,5 +1,5 @@
 # Event Audience Selection Component + Backend Transformer Integration
-![Audience Multiselect in Action](/audiance.PNG)
+![Audience Multiselect in Action](audiance.PNG)
 ## Overview
 This feature adds **multi-select audience targeting** for events in the admin panel, allowing event creators to assign one or more predefined audiences (e.g., "Students", "VIP Members", "Public", etc.) to an event.
 
