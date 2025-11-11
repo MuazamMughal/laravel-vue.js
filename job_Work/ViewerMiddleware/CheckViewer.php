@@ -22,3 +22,6 @@ class CheckIsViewer
         return $next($request);
     }
 }
+
+//''checkIsViewer' => \App\Http\Middleware\CheckIsViewer::class,'
+// in kernal
