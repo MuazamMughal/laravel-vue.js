@@ -18,3 +18,7 @@ class CheckIsViewer
         if ($user && $user->role === 'viewer') {
             return redirect("/home")->with('error', 'You do not have permission to access this page.');
         }
+
+        return $next($request);
+    }
+}
