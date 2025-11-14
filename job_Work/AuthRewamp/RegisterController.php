@@ -71,3 +71,7 @@ class RegisteredUserController extends Controller
                 'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
         }
+
+        $request->validate($rules);
+
+        $user = $this->createUser($request, $profile);
