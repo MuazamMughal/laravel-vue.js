@@ -41,3 +41,19 @@ class RegisteredUserController extends Controller
             'expertCategories' => $expertCategories
         ]);
     }
+
+    /**
+     * Handle an incoming registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function store(Request $request)
+    {
+        $profile = $request->profile ?? '';
+        
+        $rules = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:' . User::class,
+            'password' => ['required'],
+            'profile' => 'required|in:expert,viewer,channel',
+        ];
