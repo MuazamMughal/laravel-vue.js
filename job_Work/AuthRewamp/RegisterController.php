@@ -57,3 +57,17 @@ class RegisteredUserController extends Controller
             'password' => ['required'],
             'profile' => 'required|in:expert,viewer,channel',
         ];
+
+        if ($profile === 'expert') {
+            $rules = array_merge($rules, [
+                'category_id' => ['required'],
+                'linkedin_url' => 'required|string|' . url_pattern(),
+            ]);
+        } elseif ($profile === 'channel') {
+            $rules = array_merge($rules, [
+                'category_id' => 'required',
+                'state_id' => 'required',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+        }
