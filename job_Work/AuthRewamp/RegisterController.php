@@ -100,4 +100,78 @@ class RegisteredUserController extends Controller
             : redirect($redirectUrl);
     }
 
-    
+    private function createUser(Request $request, string $profile): User
+    {
+        $userData = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $profile === 'viewer' ? 'viewer' : 'startup',
+            'slug' => slug($request->name) . Str::random(6),
+            'password' => Hash::make($request->password),
+            'type' => $profile,
+        ];
+
+        if ($profile === 'expert') {
+            $profilePhotoPath = defaultImage("USER");
+        
+            if ($request->hasFile('profile_photo')) {
+                $profilePhotoPath = storeImage($request->file('profile_photo'), 'experts/profile') ?? $profilePhotoPath;
+            } 
+
+            $userData = array_merge($userData, [
+                'linkedin_url' => $request->linkedin_url,
+                'profile_photo' => $profilePhotoPath,
+            ]);
+        } elseif ($profile === 'channel' ) {
+            $userData = array_merge($userData, [
+                'company_website' => $request->website,
+            ]);
+        }
+
+        return User::create($userData);
+    }
+
+    private function createExpertProfile(User $user, Request $request): Expert
+    {
+        return Expert::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'slug' => $user->slug,
+            'profile_photo' => $user->profile_photo,
+            'cover_photo' => null,
+            'status' => 'draft',
+            'expert_category_id' => $request->category_id,
+            'linked_in_url' => $request->linkedin_url,
+        ]);
+    }
+
+    private function createChannelProfile(User $user, Request $request): void
+    {
+        $slug = Str::slug(substr($request->name, 0, 25));
+        if (Channel::where('slug', $slug)->exists()) {
+            $slug .= '-' . time();
+        }
+        
+        $logoPath = defaultImage("CHANNEL_LOGO");
+        $coverPhotoPath = defaultImage("CHANNEL_COVER_PHOTO");
+
+        if ($request->hasFile('logo')) {
+            $logoPath = storeImage($request->file('logo'), 'channels/logos') ?? $logoPath;
+        }
+
+        if ($request->hasFile('cover_photo')) {
+            $coverPhotoPath = storeImage($request->file('cover_photo'), 'channels/covers') ?? $coverPhotoPath;
+        }
+
+        Channel::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'name' => $request->channel_name ?? $request->name,
+            'slug' => $slug,
+            'state_id' => $request->state_id,
+            'poster' => $logoPath,
+            'cover_photo' => $coverPhotoPath,
+            'category_id' => $request->category_id,
+        ]);
+    }
+}
