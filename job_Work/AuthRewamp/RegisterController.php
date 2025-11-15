@@ -75,3 +75,29 @@ class RegisteredUserController extends Controller
         $request->validate($rules);
 
         $user = $this->createUser($request, $profile);
+
+        if ($profile === 'expert') {
+            $expert = $this->createExpertProfile($user, $request);
+            if ($request->has('skills')) {
+                $skillIds = collect($request->skills)->pluck('id')->toArray();
+                $expert->skills()->sync($skillIds);
+            }
+        } elseif ($profile === 'channel') {
+            $this->createChannelProfile($user, $request);
+        }
+
+        checkAndAddAsChannelCollaborator($request->email);
+
+        event(new Registered($user));
+        Auth::login($user);
+
+        $redirectUrl = !empty($request->get('r')) 
+            ? base64_decode($request->get('r'))
+            : Session::get('url.intended', RouteServiceProvider::MAIN);
+
+        return $request->ajax()
+            ? response()->json(['redirect_url' => $redirectUrl])
+            : redirect($redirectUrl);
+    }
+
+    
