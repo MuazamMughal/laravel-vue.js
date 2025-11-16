@@ -162,3 +162,16 @@ class RegisteredUserController extends Controller
         if ($request->hasFile('cover_photo')) {
             $coverPhotoPath = storeImage($request->file('cover_photo'), 'channels/covers') ?? $coverPhotoPath;
         }
+
+        Channel::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'name' => $request->channel_name ?? $request->name,
+            'slug' => $slug,
+            'state_id' => $request->state_id,
+            'poster' => $logoPath,
+            'cover_photo' => $coverPhotoPath,
+            'category_id' => $request->category_id,
+        ]);
+    }
+}
