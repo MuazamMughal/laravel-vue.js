@@ -144,3 +144,21 @@ class RegisteredUserController extends Controller
             'linked_in_url' => $request->linkedin_url,
         ]);
     }
+
+    private function createChannelProfile(User $user, Request $request): void
+    {
+        $slug = Str::slug(substr($request->name, 0, 25));
+        if (Channel::where('slug', $slug)->exists()) {
+            $slug .= '-' . time();
+        }
+        
+        $logoPath = defaultImage("CHANNEL_LOGO");
+        $coverPhotoPath = defaultImage("CHANNEL_COVER_PHOTO");
+
+        if ($request->hasFile('logo')) {
+            $logoPath = storeImage($request->file('logo'), 'channels/logos') ?? $logoPath;
+        }
+
+        if ($request->hasFile('cover_photo')) {
+            $coverPhotoPath = storeImage($request->file('cover_photo'), 'channels/covers') ?? $coverPhotoPath;
+        }
