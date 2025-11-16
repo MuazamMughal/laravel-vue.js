@@ -117,3 +117,30 @@ class RegisteredUserController extends Controller
             if ($request->hasFile('profile_photo')) {
                 $profilePhotoPath = storeImage($request->file('profile_photo'), 'experts/profile') ?? $profilePhotoPath;
             } 
+
+            $userData = array_merge($userData, [
+                'linkedin_url' => $request->linkedin_url,
+                'profile_photo' => $profilePhotoPath,
+            ]);
+        } elseif ($profile === 'channel' ) {
+            $userData = array_merge($userData, [
+                'company_website' => $request->website,
+            ]);
+        }
+
+        return User::create($userData);
+    }
+
+    private function createExpertProfile(User $user, Request $request): Expert
+    {
+        return Expert::create([
+            'uuid' => Str::uuid(),
+            'user_id' => $user->id,
+            'slug' => $user->slug,
+            'profile_photo' => $user->profile_photo,
+            'cover_photo' => null,
+            'status' => 'draft',
+            'expert_category_id' => $request->category_id,
+            'linked_in_url' => $request->linkedin_url,
+        ]);
+    }
