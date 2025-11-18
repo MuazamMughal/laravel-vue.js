@@ -75,3 +75,26 @@ class SocialRegisterController extends Controller
             ? response()->json(['redirect_url' => $redirectUrl])
             : redirect($redirectUrl);
     }
+
+    private function updateUser(User $user, Request $request, string $profile): void
+    {
+        $userData = [
+            'name' => $request->name,
+            'profile_photo' => $request->profile_photo ?? $user->profile_photo,
+            'role' => $profile === 'viewer' ? 'viewer' : 'startup',
+        ];
+
+       if ($profile === 'expert') {
+            $userData['linkedin_url'] = $request->linkedin_url;
+            if ($request->hasFile('profile_photo')) {
+                $userData['profile_photo'] = storeImage($request->file('profile_photo'), 'experts/profile');
+            } else {
+                $userData['profile_photo'] = $user->profile_photo ?? defaultImage('USER');
+            }
+        } elseif ($profile === 'channel') {
+            $userData['company_website'] = $request->website;
+        }
+
+        $user->update($userData);
+    }
+
