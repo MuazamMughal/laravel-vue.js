@@ -56,3 +56,22 @@ class SocialRegisterController extends Controller
         $request->validate($rules);
 
         $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            $this->updateUser($user, $request, $profile);
+            
+            if ($profile === 'expert') {
+                $this->updateExpertProfile($user, $request);
+            } elseif ($profile === 'channel') {
+                $this->updateChannelProfile($user, $request);
+            }
+        }
+
+        $redirectUrl = !empty($request->get('r')) 
+            ? base64_decode($request->get('r'))
+            : Session::get('url.intended', RouteServiceProvider::MAIN);
+
+        return $request->ajax()
+            ? response()->json(['redirect_url' => $redirectUrl])
+            : redirect($redirectUrl);
+    }
