@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Channel;
+use App\Models\brand;
 use App\Models\Skill;
 use App\Models\User;
-use App\Models\Expert;
+use App\Models\mentor;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
-use App\Models\ChannelCategory;
-use App\Models\ExpertCategory;
+use App\Models\brandCategory;
+use App\Models\mentorCategory;
 use Illuminate\Support\Str;
 
 class SocialRegisterController extends Controller
@@ -20,12 +20,12 @@ class SocialRegisterController extends Controller
     public function index(): Response
     {
         $skills = Skill::all();
-        $channelCategories = ChannelCategory::all();
-        $expertCategories = ExpertCategory::all();
+        $brandCategories = brandCategory::all();
+        $mentorCategories = mentorCategory::all();
         return Inertia::render('Auth/Register', [
             'skills' => $skills,
-            'channelCategories' => $channelCategories,
-            'expertCategories' => $expertCategories
+            'brandCategories' => $brandCategories,
+            'mentorCategories' => $mentorCategories
         ]);
     }
 
@@ -36,15 +36,15 @@ class SocialRegisterController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'profile' => 'required|in:expert,viewer,channel',
+            'profile' => 'required|in:mentor,viewer,brand',
         ];
 
-        if ($profile === 'expert') {
+        if ($profile === 'mentor') {
             $rules = array_merge($rules, [
                 'category_id' => ['required'],
                 'linkedin_url' => 'required|string|' . url_pattern(),
             ]);
-        } elseif ($profile === 'channel') {
+        } elseif ($profile === 'brand') {
             $rules = array_merge($rules, [
                 'category_id' => 'required',
                 'state_id' => 'required',
@@ -60,10 +60,10 @@ class SocialRegisterController extends Controller
         if ($user) {
             $this->updateUser($user, $request, $profile);
             
-            if ($profile === 'expert') {
-                $this->updateExpertProfile($user, $request);
-            } elseif ($profile === 'channel') {
-                $this->updateChannelProfile($user, $request);
+            if ($profile === 'mentor') {
+                $this->updatementorProfile($user, $request);
+            } elseif ($profile === 'brand') {
+                $this->updatebrandProfile($user, $request);
             }
         }
 
@@ -84,93 +84,93 @@ class SocialRegisterController extends Controller
             'role' => $profile === 'viewer' ? 'viewer' : 'startup',
         ];
 
-       if ($profile === 'expert') {
+       if ($profile === 'mentor') {
             $userData['linkedin_url'] = $request->linkedin_url;
             if ($request->hasFile('profile_photo')) {
-                $userData['profile_photo'] = storeImage($request->file('profile_photo'), 'experts/profile');
+                $userData['profile_photo'] = storeImage($request->file('profile_photo'), 'mentors/profile');
             } else {
                 $userData['profile_photo'] = $user->profile_photo ?? defaultImage('USER');
             }
-        } elseif ($profile === 'channel') {
+        } elseif ($profile === 'brand') {
             $userData['company_website'] = $request->website;
         }
 
         $user->update($userData);
     }
 
-    private function updateExpertProfile(User $user, Request $request): void
+    private function updatementorProfile(User $user, Request $request): void
     {
-        $expert = Expert::firstOrNew(['user_id' => $user->id]);
-        $expert->fill([
-            'expert_category_id' => $request->category_id,
+        $mentor = mentor::firstOrNew(['user_id' => $user->id]);
+        $mentor->fill([
+            'mentor_category_id' => $request->category_id,
             'linked_in_url' => $request->linkedin_url,
         ]);
 
-        if (!$expert->exists) {
-            $expert->uuid = Str::uuid();
-            $expert->slug = $user->slug;
-            $expert->status = 'draft';
+        if (!$mentor->exists) {
+            $mentor->uuid = Str::uuid();
+            $mentor->slug = $user->slug;
+            $mentor->status = 'draft';
         }
-        $expert->profile_photo = $user->profile_photo;
+        $mentor->profile_photo = $user->profile_photo;
 
-        $expert->save();
+        $mentor->save();
 
         if ($request->has('skills')) {
             $skillIds = collect($request->skills)->pluck('id')->toArray();
-            $expert->skills()->sync($skillIds);
+            $mentor->skills()->sync($skillIds);
         }
     }
 
 
-    private function updateChannelProfile(User $user, Request $request): void
+    private function updatebrandProfile(User $user, Request $request): void
     {
-        $channel = Channel::where('user_id', $user->id)->first();
+        $brand = brand::where('user_id', $user->id)->first();
 
-        $channelData = [
-            'name' => $request->channel_name ?? $user->name,
+        $brandData = [
+            'name' => $request->brand_name ?? $user->name,
             'state_id' => $request->state_id,
             'category_id' => $request->category_id,
         ];
 
         if ($request->hasFile('logo')) {
-            $channelData['poster'] = storeImage($request->file('logo'), 'channels/logos') 
-                ?? $channel->poster;
+            $brandData['poster'] = storeImage($request->file('logo'), 'brands/logos') 
+                ?? $brand->poster;
         }
 
         if ($request->hasFile('cover_photo')) {
-            $channelData['cover_photo'] = storeImage($request->file('cover_photo'), 'channels/covers')
-                ?? $channel->cover_photo;
+            $brandData['cover_photo'] = storeImage($request->file('cover_photo'), 'brands/covers')
+                ?? $brand->cover_photo;
         }
 
-        if ($channel) {
-            $channel->update($channelData);
+        if ($brand) {
+            $brand->update($brandData);
         } else {
-            $this->createChannelProfile($user, $request);
+            $this->createbrandProfile($user, $request);
         }
     }
 
-    private function createChannelProfile(User $user, Request $request): void
+    private function createbrandProfile(User $user, Request $request): void
     {
         $slug = Str::slug(substr($request->name, 0, 25));
-        if (Channel::where('slug', $slug)->exists()) {
+        if (brand::where('slug', $slug)->exists()) {
             $slug .= '-' . time();
         }
         
-        $logoPath = defaultImage("CHANNEL_LOGO");
-        $coverPhotoPath = defaultImage("CHANNEL_COVER_PHOTO");
+        $logoPath = defaultImage("brand_LOGO");
+        $coverPhotoPath = defaultImage("brand_COVER_PHOTO");
 
         if ($request->hasFile('logo')) {
-            $logoPath = storeImage($request->file('logo'), 'channels/logos') ?? $logoPath;
+            $logoPath = storeImage($request->file('logo'), 'brands/logos') ?? $logoPath;
         }
 
         if ($request->hasFile('cover_photo')) {
-            $coverPhotoPath = storeImage($request->file('cover_photo'), 'channels/covers') ?? $coverPhotoPath;
+            $coverPhotoPath = storeImage($request->file('cover_photo'), 'brands/covers') ?? $coverPhotoPath;
         }
 
-        Channel::create([
+        brand::create([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'name' => $request->channel_name ?? $request->name,
+            'name' => $request->brand_name ?? $request->name,
             'slug' => $slug,
             'state_id' => $request->state_id,
             'poster' => $logoPath,

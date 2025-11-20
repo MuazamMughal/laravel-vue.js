@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Channel;
-use App\Models\ChannelInvites;
-use App\Models\Expert;
+use App\Models\brand;
+use App\Models\brandInvites;
+use App\Models\mentor;
 use App\Models\User;
 use App\Models\Skill;
-use App\Models\ChannelCollaboratorsInvites;
+use App\Models\brandCollaboratorsInvites;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -21,8 +21,8 @@ use Inertia\Response;
 use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
-use App\Models\ChannelCategory;
-use App\Models\ExpertCategory;
+use App\Models\brandCategory;
+use App\Models\mentorCategory;
 
 class RegisteredUserController extends Controller
 {
@@ -33,12 +33,12 @@ class RegisteredUserController extends Controller
     {
         Session::put('url.intended', Session::get('url.intended', RouteServiceProvider::MAIN));
         $skills = Skill::all();
-        $channelCategories = ChannelCategory::all();
-        $expertCategories = ExpertCategory::all();
+        $brandCategories = brandCategory::all();
+        $mentorCategories = mentorCategory::all();
         return Inertia::render('Auth/Register', [
             'skills' => $skills,
-            'channelCategories' => $channelCategories,
-            'expertCategories' => $expertCategories
+            'brandCategories' => $brandCategories,
+            'mentorCategories' => $mentorCategories
         ]);
     }
 
@@ -55,15 +55,15 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => ['required'],
-            'profile' => 'required|in:expert,viewer,channel',
+            'profile' => 'required|in:mentor,viewer,brand',
         ];
 
-        if ($profile === 'expert') {
+        if ($profile === 'mentor') {
             $rules = array_merge($rules, [
                 'category_id' => ['required'],
                 'linkedin_url' => 'required|string|' . url_pattern(),
             ]);
-        } elseif ($profile === 'channel') {
+        } elseif ($profile === 'brand') {
             $rules = array_merge($rules, [
                 'category_id' => 'required',
                 'state_id' => 'required',
@@ -76,17 +76,17 @@ class RegisteredUserController extends Controller
 
         $user = $this->createUser($request, $profile);
 
-        if ($profile === 'expert') {
-            $expert = $this->createExpertProfile($user, $request);
+        if ($profile === 'mentor') {
+            $mentor = $this->creatementorProfile($user, $request);
             if ($request->has('skills')) {
                 $skillIds = collect($request->skills)->pluck('id')->toArray();
-                $expert->skills()->sync($skillIds);
+                $mentor->skills()->sync($skillIds);
             }
-        } elseif ($profile === 'channel') {
-            $this->createChannelProfile($user, $request);
+        } elseif ($profile === 'brand') {
+            $this->createbrandProfile($user, $request);
         }
 
-        checkAndAddAsChannelCollaborator($request->email);
+        checkAndAddAsbrandCollaborator($request->email);
 
         event(new Registered($user));
         Auth::login($user);
@@ -111,18 +111,18 @@ class RegisteredUserController extends Controller
             'type' => $profile,
         ];
 
-        if ($profile === 'expert') {
+        if ($profile === 'mentor') {
             $profilePhotoPath = defaultImage("USER");
         
             if ($request->hasFile('profile_photo')) {
-                $profilePhotoPath = storeImage($request->file('profile_photo'), 'experts/profile') ?? $profilePhotoPath;
+                $profilePhotoPath = storeImage($request->file('profile_photo'), 'mentors/profile') ?? $profilePhotoPath;
             } 
 
             $userData = array_merge($userData, [
                 'linkedin_url' => $request->linkedin_url,
                 'profile_photo' => $profilePhotoPath,
             ]);
-        } elseif ($profile === 'channel' ) {
+        } elseif ($profile === 'brand' ) {
             $userData = array_merge($userData, [
                 'company_website' => $request->website,
             ]);
@@ -131,42 +131,42 @@ class RegisteredUserController extends Controller
         return User::create($userData);
     }
 
-    private function createExpertProfile(User $user, Request $request): Expert
+    private function creatementorProfile(User $user, Request $request): mentor
     {
-        return Expert::create([
+        return mentor::create([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
             'slug' => $user->slug,
             'profile_photo' => $user->profile_photo,
             'cover_photo' => null,
             'status' => 'draft',
-            'expert_category_id' => $request->category_id,
+            'mentor_category_id' => $request->category_id,
             'linked_in_url' => $request->linkedin_url,
         ]);
     }
 
-    private function createChannelProfile(User $user, Request $request): void
+    private function createbrandProfile(User $user, Request $request): void
     {
         $slug = Str::slug(substr($request->name, 0, 25));
-        if (Channel::where('slug', $slug)->exists()) {
+        if (brand::where('slug', $slug)->exists()) {
             $slug .= '-' . time();
         }
         
-        $logoPath = defaultImage("CHANNEL_LOGO");
-        $coverPhotoPath = defaultImage("CHANNEL_COVER_PHOTO");
+        $logoPath = defaultImage("brand_LOGO");
+        $coverPhotoPath = defaultImage("brand_COVER_PHOTO");
 
         if ($request->hasFile('logo')) {
-            $logoPath = storeImage($request->file('logo'), 'channels/logos') ?? $logoPath;
+            $logoPath = storeImage($request->file('logo'), 'brands/logos') ?? $logoPath;
         }
 
         if ($request->hasFile('cover_photo')) {
-            $coverPhotoPath = storeImage($request->file('cover_photo'), 'channels/covers') ?? $coverPhotoPath;
+            $coverPhotoPath = storeImage($request->file('cover_photo'), 'brands/covers') ?? $coverPhotoPath;
         }
 
-        Channel::create([
+        brand::create([
             'uuid' => Str::uuid(),
             'user_id' => $user->id,
-            'name' => $request->channel_name ?? $request->name,
+            'name' => $request->brand_name ?? $request->name,
             'slug' => $slug,
             'state_id' => $request->state_id,
             'poster' => $logoPath,
